@@ -1,26 +1,37 @@
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { useSQLiteContext } from "expo-sqlite";
 import FloatingAddButton from "@/components/floatingAddButton";
 import FridgeItemView from "@/components/fridgeItem";
-import { FridgeItem } from "@/types";
-import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-
-const expampleData: FridgeItem[] = [
-  { id: "1", name: "Jogurt", date: "2025-03-20" },
-  { id: "2", name: "Mleko", date: "2025-03-20" },
-  { id: "3", name: "Ser", date: "2025-03-20" },
-  { id: "4", name: "Szynka", date: "2025-03-20" },
-  { id: "5", name: "Masło", date: "2025-03-20" },
-  { id: "6", name: "Jajka", date: "2025-03-20" },
-];
+import { FridgeItem } from "@/utils/types";
+import { getAllItems, deleteItem } from "@/utils/dataStorage";
 
 const Index = () => {
+  const db = useSQLiteContext();
+  const [items, setItems] = useState<FridgeItem[]>([]);
+
+  useEffect(() => {
+    //FIXME: adding or deleting an item does not update the list
+    async function setup() {
+      const result = await getAllItems(db);
+      setItems(result);
+    }
+    setup();
+  }, [db]);
+
   return (
     <View style={styles.container}>
-      <FloatingAddButton />
+      <FloatingAddButton /> //FIXME: FloatingAddButton loses clickability when
+      there are items in the list
       <FlatList
-        data={expampleData}
-        keyExtractor={(item) => item.id}
-        renderItem={FridgeItemView}
+        data={items}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <FridgeItemView
+            item={item}
+            onDelete={() => deleteItem(db, item.id)}
+          />
+        )}
         contentContainerStyle={styles.list}
       />
     </View>

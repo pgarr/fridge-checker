@@ -1,5 +1,5 @@
 export interface FridgeItem {
-  id: string;
+  id: number;
   name: string;
   date: string;
 }

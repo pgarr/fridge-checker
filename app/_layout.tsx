@@ -1,17 +1,15 @@
 import { Stack } from "expo-router";
+import { SQLiteProvider } from "expo-sqlite";
+import { migrateDbIfNeeded } from "@/utils/dataStorage";
 
 export default function RootLayout() {
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{ title: "List", headerShown: false }}
-      />
-      <Stack.Screen
-        name="newItem"
-        options={{ title: "New item", headerShown: false }}
-      />
-      <Stack.Screen name="about" options={{ title: "About" }} />
-    </Stack>
+    <SQLiteProvider databaseName="fridgeChecker.db" onInit={migrateDbIfNeeded}>
+      <Stack>
+        <Stack.Screen name="index" options={{ title: "List" }} />
+        <Stack.Screen name="newItem" options={{ title: "New item" }} />
+        <Stack.Screen name="about" options={{ title: "About" }} />
+      </Stack>
+    </SQLiteProvider>
   );
 }
