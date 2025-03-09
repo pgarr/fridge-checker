@@ -4,35 +4,58 @@ import { useSQLiteContext } from "expo-sqlite";
 import FloatingAddButton from "@/components/floatingAddButton";
 import FridgeItemView from "@/components/fridgeItem";
 import { FridgeItem } from "@/utils/types";
-import { getAllItems, deleteItem } from "@/utils/dataStorage";
+import { getAllItems, deleteItem, addItem } from "@/utils/dataStorage";
+import NewItemModal from "@/components/newItemModal";
 
 const Index = () => {
   const db = useSQLiteContext();
   const [items, setItems] = useState<FridgeItem[]>([]);
+  const [showAddItem, setShowAddItem] = useState<boolean>(true);
 
   useEffect(() => {
-    //FIXME: adding or deleting an item does not update the list
-    async function setup() {
-      const result = await getAllItems(db);
-      setItems(result);
-    }
-    setup();
+    loadItems();
   }, [db]);
+
+  const loadItems = async () => {
+    const result = await getAllItems(db);
+    setItems(result);
+  };
+
+  const addNewItem = async (name: string, date: string) => {
+    await addItem(db, name, date);
+    loadItems();
+    setShowAddItem(false);
+  };
+
+  const deleteListedItem = async (id: number) => {
+    await deleteItem(db, id);
+    loadItems();
+  };
 
   return (
     <View style={styles.container}>
-      <FloatingAddButton /> //FIXME: FloatingAddButton loses clickability when
-      there are items in the list
       <FlatList
         data={items}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <FridgeItemView
             item={item}
-            onDelete={() => deleteItem(db, item.id)}
+            onDelete={() => deleteListedItem(item.id)}
           />
         )}
         contentContainerStyle={styles.list}
+      />
+      {!showAddItem && (
+        <FloatingAddButton
+          onClick={() => {
+            setShowAddItem(true);
+          }}
+        />
+      )}
+      <NewItemModal
+        isVisible={showAddItem}
+        onClose={() => setShowAddItem(false)}
+        onSave={addNewItem}
       />
     </View>
   );

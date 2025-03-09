@@ -7,7 +7,6 @@ export default function RootLayout() {
     <SQLiteProvider databaseName="fridgeChecker.db" onInit={migrateDbIfNeeded}>
       <Stack>
         <Stack.Screen name="index" options={{ title: "List" }} />
-        <Stack.Screen name="newItem" options={{ title: "New item" }} />
         <Stack.Screen name="about" options={{ title: "About" }} />
       </Stack>
     </SQLiteProvider>

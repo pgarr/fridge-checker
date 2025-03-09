@@ -22,7 +22,6 @@ const FridgeItem = ({ item, onDelete }: FridgeItemProps) => {
 const styles = StyleSheet.create({
   container: {
     borderColor: "#ccc",
-    borderRadius: 8,
     borderWidth: 1,
     display: "flex",
     flexDirection: "row",

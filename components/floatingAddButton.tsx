@@ -1,14 +1,15 @@
 import { Octicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-const FloatingAddButton = () => {
+interface FloatingAddButtonProps {
+  onClick: () => void;
+}
+
+const FloatingAddButton = ({ onClick }: FloatingAddButtonProps) => {
   return (
-    <Link href="/newItem" asChild>
-      <TouchableOpacity style={styles.floatingButton}>
-        <Octicons name="diff-added" size={24} color="white" />
-      </TouchableOpacity>
-    </Link>
+    <TouchableOpacity style={styles.floatingButton} onPress={onClick}>
+      <Octicons name="diff-added" size={24} color="white" />
+    </TouchableOpacity>
   );
 };
 
