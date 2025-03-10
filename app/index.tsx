@@ -6,6 +6,7 @@ import FridgeItemView from "@/components/fridgeItem";
 import { FridgeItem } from "@/utils/types";
 import { getAllItems, deleteItem, addItem } from "@/utils/dataStorage";
 import NewItemModal from "@/components/newItemModal";
+import { colors } from "@/utils/colors";
 
 const Index = () => {
   const db = useSQLiteContext();
@@ -64,13 +65,15 @@ const Index = () => {
 const styles = StyleSheet.create({
   list: {
     width: "100%",
+    gap: 1,
   },
   container: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 20,
-    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: colors.background,
+    flex: 1,
+    justifyContent: "center",
+    margin: 0,
+    padding: 0,
   },
 });
 

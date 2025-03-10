@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { FridgeItem as FridgeItemType } from "@/utils/types";
+import { colors } from "@/utils/colors";
 
 interface FridgeItemProps {
   item: FridgeItemType;
@@ -21,15 +22,21 @@ const FridgeItem = ({ item, onDelete }: FridgeItemProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: "#ccc",
-    borderWidth: 1,
+    backgroundColor: colors.tile,
     display: "flex",
     flexDirection: "row",
     gap: 10,
     justifyContent: "space-between",
-    margin: 10,
-    padding: 10,
-    width: "90%",
+    padding: 20,
+    width: "100%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   name: { fontWeight: "bold" },
   date: { fontFamily: "italic" },

@@ -1,3 +1,4 @@
+import { colors } from "@/utils/colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState } from "react";
 import {
@@ -33,7 +34,7 @@ const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
           <View style={styles.titleContainer}>
             <Text style={styles.title}>Add new item</Text>
             <Pressable onPress={onClose}>
-              <MaterialIcons name="close" color="#fff" size={22} />
+              <MaterialIcons name="close" size={22} />
             </Pressable>
           </View>
           <View style={styles.inputsContainer}>
@@ -61,24 +62,27 @@ const styles = StyleSheet.create({
   modalContent: {
     height: "30%",
     width: "100%",
-    backgroundColor: "#fff",
-    borderTopRightRadius: 18,
-    borderTopLeftRadius: 18,
+    backgroundColor: colors.tile,
     position: "absolute",
     bottom: 0,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+    elevation: 24,
   },
   titleContainer: {
     height: "16%",
-    backgroundColor: "#ccc",
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
+    backgroundColor: colors.tile,
     paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
   title: {
-    color: "#fff",
     fontSize: 16,
   },
   inputsContainer: {
@@ -86,7 +90,7 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: colors.background,
     borderWidth: 1,
     marginBottom: 10,
     padding: 8,
