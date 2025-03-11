@@ -11,7 +11,7 @@ import { colors } from "@/utils/colors";
 const Index = () => {
   const db = useSQLiteContext();
   const [items, setItems] = useState<FridgeItem[]>([]);
-  const [showAddItem, setShowAddItem] = useState<boolean>(true);
+  const [showAddItem, setShowAddItem] = useState<boolean>(false);
 
   useEffect(() => {
     loadItems();

@@ -1,6 +1,5 @@
 import { colors } from "@/utils/colors";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useState } from "react";
 import {
   View,
   TextInput,
@@ -10,6 +9,7 @@ import {
   Modal,
   Pressable,
 } from "react-native";
+import { useForm, Controller } from "react-hook-form";
 
 interface NewItemModalProps {
   isVisible: boolean;
@@ -17,14 +17,23 @@ interface NewItemModalProps {
   onSave: (name: string, date: string) => void;
 }
 
-const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
-  const [name, setName] = useState("");
-  const [date, setDate] = useState("");
+type FormData = {
+  date: string;
+  name: string;
+};
 
-  const onSubmit = () => {
-    onSave(name, date);
-    setName("");
-    setDate("");
+const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>();
+
+  const onSubmit = (data: FormData) => {
+    onSave(data.name, data.date);
+    setValue("name", "");
+    setValue("date", "");
   };
 
   return (
@@ -38,19 +47,45 @@ const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
             </Pressable>
           </View>
           <View style={styles.inputsContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              value={name}
-              onChangeText={(text) => setName(text)}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Name"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="name"
             />
-            <TextInput
-              style={styles.input}
-              placeholder="Date"
-              value={date}
-              onChangeText={(text) => setDate(text)}
+            <Text style={styles.errorText}>
+              {errors.name ? "Name is required." : " "}
+            </Text>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={styles.input}
+                  placeholder="Date"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+              name="date"
             />
-            <Button title="Submit" onPress={onSubmit} />
+            <Text style={styles.errorText}>
+              {errors.date ? "Date is required." : " "}
+            </Text>
+            <Button title="Submit" onPress={handleSubmit(onSubmit)} />
           </View>
         </View>
       </Modal>
@@ -60,7 +95,7 @@ const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
 
 const styles = StyleSheet.create({
   modalContent: {
-    height: "30%",
+    height: "60%",
     width: "100%",
     backgroundColor: colors.tile,
     position: "absolute",
@@ -94,6 +129,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     padding: 8,
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
   },
 });
 
