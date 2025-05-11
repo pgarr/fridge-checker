@@ -12,7 +12,7 @@ const FridgeItem = ({ item, onDelete }: FridgeItemProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.name}>{item.name}</Text>
-      <Text style={styles.date}>{item.date}</Text>
+      <Text style={styles.date}>{item.date?.toLocaleDateString()}</Text>
       <TouchableOpacity onPress={onDelete}>
         <Ionicons name="trash-bin" size={24} color="red" />
       </TouchableOpacity>

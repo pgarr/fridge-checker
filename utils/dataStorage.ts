@@ -3,6 +3,12 @@ import { type FridgeItem } from "@/utils/types";
 
 const DATABASE_VERSION = 1;
 
+type FridgeItemDb = {
+  id: number;
+  name: string;
+  date: string; // ISO string
+};
+
 export const migrateDbIfNeeded = async (db: SQLiteDatabase) => {
   const meta = await db.getFirstAsync<{
     user_version: number;
@@ -19,18 +25,22 @@ export const migrateDbIfNeeded = async (db: SQLiteDatabase) => {
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 };
 
-export const getAllItems = async (db: SQLiteDatabase) => {
-  return db.getAllAsync<FridgeItem>("SELECT * FROM content");
+export const getAllItems = async (
+  db: SQLiteDatabase
+): Promise<FridgeItem[]> => {
+  const data = await db.getAllAsync<FridgeItemDb>("SELECT * FROM content");
+  return data.map((item) => {
+    return {
+      ...item,
+      date: new Date(item.date),
+    };
+  });
 };
 
-export const addItem = async (
-  db: SQLiteDatabase,
-  name: string,
-  date: string
-) => {
+export const addItem = async (db: SQLiteDatabase, name: string, date: Date) => {
   return db.runAsync("INSERT INTO content (name, date) VALUES (?, ?)", [
     name,
-    date,
+    date.toISOString(),
   ]);
 };
 

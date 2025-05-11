@@ -1,5 +1,4 @@
-import { colors } from "@/utils/colors";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useForm, Controller } from "react-hook-form";
 import {
   View,
   TextInput,
@@ -9,16 +8,18 @@ import {
   Modal,
   Pressable,
 } from "react-native";
-import { useForm, Controller } from "react-hook-form";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { colors } from "@/utils/colors";
+import DateInput from "./dateInput";
 
 interface NewItemModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onSave: (name: string, date: string) => void;
+  onSave: (name: string, date: Date) => void;
 }
 
 type FormData = {
-  date: string;
+  date: Date;
   name: string;
 };
 
@@ -33,7 +34,7 @@ const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
   const onSubmit = (data: FormData) => {
     onSave(data.name, data.date);
     setValue("name", "");
-    setValue("date", "");
+    setValue("date", new Date());
   };
 
   return (
@@ -71,13 +72,11 @@ const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
+              render={({ field: { onChange, value } }) => (
+                <DateInput
+                  date={value}
+                  setDate={onChange}
                   style={styles.input}
-                  placeholder="Date"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
                 />
               )}
               name="date"
