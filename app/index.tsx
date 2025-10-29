@@ -19,10 +19,10 @@ const Index = () => {
 
   const loadItems = async () => {
     const result = await getAllItems(db);
-    setItems(result);
+    setItems(result.sort((a, b) => a.date.getTime() - b.date.getTime()));
   };
 
-  const addNewItem = async (name: string, date: string) => {
+  const addNewItem = async (name: string, date: Date) => {
     await addItem(db, name, date);
     loadItems();
     setShowAddItem(false);
