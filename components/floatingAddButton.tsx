@@ -1,5 +1,5 @@
 import { Octicons } from "@expo/vector-icons";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 
 interface FloatingAddButtonProps {
   onClick: () => void;

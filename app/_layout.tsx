@@ -4,8 +4,11 @@ import { SQLiteProvider } from "expo-sqlite";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { migrateDbIfNeeded } from "@/utils/dataStorage";
+import { setupNotificationHandler } from "@/utils/notifications";
 
 export default function RootLayout() {
+  setupNotificationHandler();
+
   return (
     <SQLiteProvider databaseName="fridgeChecker.db" onInit={migrateDbIfNeeded}>
       <Tabs

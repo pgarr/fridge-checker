@@ -1,12 +1,13 @@
 import { type SQLiteDatabase } from "expo-sqlite";
 import { type FridgeItem } from "@/utils/types";
 
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 2;
 
 type FridgeItemDb = {
   id: number;
   name: string;
   date: string; // ISO string
+  notificationId?: string;
 };
 
 export const migrateDbIfNeeded = async (db: SQLiteDatabase) => {
@@ -21,6 +22,11 @@ export const migrateDbIfNeeded = async (db: SQLiteDatabase) => {
   PRAGMA journal_mode = 'wal';
   CREATE TABLE content (id INTEGER PRIMARY KEY NOT NULL, name TEXT NOT NULL, date TEXT NOT NULL);
   `);
+  }
+  if (!meta || meta.user_version <= 1) {
+    await db.execAsync(`
+      ALTER TABLE content ADD COLUMN notificationId TEXT;
+    `);
   }
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 };
@@ -37,11 +43,14 @@ export const getAllItems = async (
   });
 };
 
-export const addItem = async (db: SQLiteDatabase, name: string, date: Date) => {
-  return db.runAsync("INSERT INTO content (name, date) VALUES (?, ?)", [
-    name,
-    date.toISOString(),
-  ]);
+export const addItem = async (
+  db: SQLiteDatabase,
+  item: { name: string; date: string; notificationId: string }
+) => {
+  return db.runAsync(
+    "INSERT INTO content (name, date, notificationId) VALUES (?, ?, ?)",
+    [item.name, item.date, item.notificationId]
+  );
 };
 
 export const deleteItem = async (db: SQLiteDatabase, id: number) => {

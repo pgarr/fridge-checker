@@ -7,6 +7,11 @@ import { FridgeItem } from "@/utils/types";
 import { getAllItems, deleteItem, addItem } from "@/utils/dataStorage";
 import NewItemModal from "@/components/newItemModal";
 import { colors } from "@/utils/colors";
+import {
+  cancelNotification,
+  scheduleNotification,
+} from "@/utils/notifications";
+import { getDaysForCritical, getHourForNotification } from "@/utils/config";
 
 const Index = () => {
   const db = useSQLiteContext();
@@ -15,6 +20,7 @@ const Index = () => {
 
   useEffect(() => {
     loadItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [db]);
 
   const loadItems = async () => {
@@ -23,12 +29,21 @@ const Index = () => {
   };
 
   const addNewItem = async (name: string, date: Date) => {
-    await addItem(db, name, date);
+    const title = `Item "${name}" is expiring tomorrow!`;
+
+    const notificationDate = new Date(date);
+    notificationDate.setDate(notificationDate.getDate() - getDaysForCritical());
+    notificationDate.setHours(getHourForNotification(), 0, 0, 0);
+
+    const notificationId = await scheduleNotification(notificationDate, title);
+    await addItem(db, { name, date: date.toISOString(), notificationId });
     loadItems();
     setShowAddItem(false);
   };
 
   const deleteListedItem = async (id: number) => {
+    const notificationId = items.find((item) => item.id === id)?.notificationId;
+    notificationId && cancelNotification(notificationId);
     await deleteItem(db, id);
     loadItems();
   };
