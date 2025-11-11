@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import { runOnJS } from "react-native-reanimated";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { useSQLiteContext } from "expo-sqlite";
 import FloatingAddButton from "@/components/floatingAddButton";
 import FridgeItemView from "@/components/fridgeItem";
 import { FridgeItem } from "@/utils/types";
-import { getAllItems, deleteItem, addItem } from "@/utils/dataStorage";
+import { getAllItems, deleteItems, addItem } from "@/utils/dataStorage";
 import NewItemModal from "@/components/newItemModal";
 import { colors } from "@/utils/colors";
 import {
@@ -17,6 +19,9 @@ const Index = () => {
   const db = useSQLiteContext();
   const [items, setItems] = useState<FridgeItem[]>([]);
   const [showAddItem, setShowAddItem] = useState<boolean>(false);
+  const [selectedItemIds, setSelectedItemIds] = useState<Set<number>>(
+    new Set()
+  );
 
   useEffect(() => {
     loadItems();
@@ -41,11 +46,27 @@ const Index = () => {
     setShowAddItem(false);
   };
 
-  const deleteListedItem = async (id: number) => {
-    const notificationId = items.find((item) => item.id === id)?.notificationId;
-    notificationId && cancelNotification(notificationId);
-    await deleteItem(db, id);
+  const deleteSelectedItems = async () => {
+    selectedItemIds.forEach((id) => {
+      const notificationId = items.find(
+        (item) => item.id === id
+      )?.notificationId;
+      notificationId && cancelNotification(notificationId);
+    });
+    await deleteItems(db, Array.from(selectedItemIds));
     loadItems();
+  };
+
+  const onLongPressItem = (id: number) => {
+    setSelectedItemIds((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(id)) {
+        newSet.delete(id);
+      } else {
+        newSet.add(id);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -53,12 +74,22 @@ const Index = () => {
       <FlatList
         data={items}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <FridgeItemView
-            item={item}
-            onDelete={() => deleteListedItem(item.id)}
-          />
-        )}
+        renderItem={({ item }) => {
+          const longPressGesture = Gesture.LongPress().onEnd((e, success) => {
+            if (success) {
+              runOnJS(onLongPressItem)(item.id);
+            }
+          });
+
+          return (
+            <GestureDetector gesture={longPressGesture}>
+              <FridgeItemView
+                item={item}
+                selected={selectedItemIds.has(item.id)}
+              />
+            </GestureDetector>
+          );
+        }}
         contentContainerStyle={styles.list}
       />
       {!showAddItem && (

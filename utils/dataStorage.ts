@@ -53,6 +53,7 @@ export const addItem = async (
   );
 };
 
-export const deleteItem = async (db: SQLiteDatabase, id: number) => {
-  return db.runAsync("DELETE FROM content WHERE id = ?", [id]);
+export const deleteItems = async (db: SQLiteDatabase, ids: number[]) => {
+  const placeholders = ids.map(() => "?").join(", ");
+  return db.runAsync(`DELETE FROM content WHERE id IN (${placeholders})`, ids);
 };
