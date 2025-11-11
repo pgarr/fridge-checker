@@ -14,6 +14,8 @@ import {
   scheduleNotification,
 } from "@/utils/notifications";
 import { getDaysForCritical, getHourForNotification } from "@/utils/config";
+import FloatingMenu from "@/components/floatingMenu";
+import { set } from "react-hook-form";
 
 const Index = () => {
   const db = useSQLiteContext();
@@ -54,6 +56,7 @@ const Index = () => {
       notificationId && cancelNotification(notificationId);
     });
     await deleteItems(db, Array.from(selectedItemIds));
+    setSelectedItemIds(new Set());
     loadItems();
   };
 
@@ -92,6 +95,13 @@ const Index = () => {
         }}
         contentContainerStyle={styles.list}
       />
+      {!showAddItem && selectedItemIds.size > 0 && (
+        <FloatingMenu
+          onDelete={deleteSelectedItems}
+          onCancel={() => setSelectedItemIds(new Set())}
+          selectedCount={selectedItemIds.size}
+        />
+      )}
       {!showAddItem && (
         <FloatingAddButton
           onClick={() => {

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
     bottom: 40,
-    right: 30,
+    right: 40,
     elevation: 5, // For Android shadow
     shadowColor: "#000", // For iOS shadow
     shadowOffset: { width: 0, height: 2 },
