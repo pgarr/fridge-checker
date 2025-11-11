@@ -1,5 +1,4 @@
 import { StyleSheet, TouchableOpacity, Text, View } from "react-native";
-import EvilIcons from "@expo/vector-icons/EvilIcons";
 import Entypo from "@expo/vector-icons/Entypo";
 import { colors } from "@/utils/colors";
 import * as texts from "@/utils/texts";
