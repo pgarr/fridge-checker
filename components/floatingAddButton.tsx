@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    bottom: 40,
-    right: 40,
+    bottom: 20,
+    right: 20,
     elevation: 5, // For Android shadow
     shadowColor: "#000", // For iOS shadow
     shadowOffset: { width: 0, height: 2 },
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
   },
-  text: { color: colors.tile },
+  text: { color: colors.tile, fontWeight: "bold", fontSize: 16 },
   plus: {
     fontSize: 20,
     fontWeight: "bold",

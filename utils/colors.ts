@@ -4,4 +4,5 @@ export const colors = {
   warning: "#fad045ff",
   critical: "#ff5d6bff",
   button: "#005effff",
+  selected: "#cedffbff",
 };

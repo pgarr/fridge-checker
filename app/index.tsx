@@ -95,14 +95,16 @@ const Index = () => {
         }}
         contentContainerStyle={styles.list}
       />
-      {!showAddItem && selectedItemIds.size > 0 && (
+      {!showAddItem && selectedItemIds.size > 0 ? (
         <FloatingMenu
           onDelete={deleteSelectedItems}
           onCancel={() => setSelectedItemIds(new Set())}
           selectedCount={selectedItemIds.size}
+          onCopy={() => {
+            //TODO: implement copy
+          }}
         />
-      )}
-      {!showAddItem && (
+      ) : (
         <FloatingAddButton
           onClick={() => {
             setShowAddItem(true);
@@ -121,7 +123,7 @@ const Index = () => {
 const styles = StyleSheet.create({
   list: {
     width: "100%",
-    gap: 1,
+    gap: 3,
   },
   container: {
     alignItems: "center",
