@@ -1,5 +1,6 @@
-import { Octicons } from "@expo/vector-icons";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import * as texts from "@/utils/texts";
+import { colors } from "@/utils/colors";
 
 interface FloatingAddButtonProps {
   onClick: () => void;
@@ -8,16 +9,19 @@ interface FloatingAddButtonProps {
 const FloatingAddButton = ({ onClick }: FloatingAddButtonProps) => {
   return (
     <TouchableOpacity style={styles.floatingButton} onPress={onClick}>
-      <Octicons name="diff-added" size={24} color="white" />
+      <Text style={styles.text}>{texts.add}</Text>
+      <Text style={styles.plus}>+</Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   floatingButton: {
-    backgroundColor: "#ccc",
-    width: 60,
-    height: 60,
+    backgroundColor: colors.button,
+    color: colors.tile,
+    width: "auto",
+    height: "auto",
+    padding: 15,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
@@ -29,6 +33,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    display: "flex",
+    flexDirection: "row",
+    gap: 10,
+  },
+  text: { color: colors.tile },
+  plus: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: colors.tile,
   },
 });
 

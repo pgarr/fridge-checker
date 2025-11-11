@@ -3,4 +3,5 @@ export const colors = {
   tile: "#fff",
   warning: "#fad045ff",
   critical: "#ff5d6bff",
+  button: "#005effff",
 };

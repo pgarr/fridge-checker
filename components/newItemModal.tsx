@@ -84,7 +84,11 @@ const NewItemModal = ({ isVisible, onClose, onSave }: NewItemModalProps) => {
             <Text style={styles.errorText}>
               {errors.date ? "Date is required." : " "}
             </Text>
-            <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+            <Button
+              title="Submit"
+              onPress={handleSubmit(onSubmit)}
+              color={colors.button}
+            />
           </View>
         </View>
       </Modal>
