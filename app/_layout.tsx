@@ -1,11 +1,13 @@
 import { Platform } from "react-native";
 import { Tabs } from "expo-router";
 import { SQLiteProvider } from "expo-sqlite";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import { migrateDbIfNeeded } from "@/utils/dataStorage";
 import { setupNotificationHandler } from "@/utils/notifications";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
+import Feather from "@expo/vector-icons/Feather";
 
 export default function RootLayout() {
   setupNotificationHandler();
@@ -15,7 +17,7 @@ export default function RootLayout() {
       <GestureHandlerRootView>
         <Tabs
           screenOptions={{
-            headerShown: false,
+            headerShown: true,
             tabBarStyle: Platform.select({
               ios: {
                 position: "absolute",
@@ -27,18 +29,18 @@ export default function RootLayout() {
           <Tabs.Screen
             name="index"
             options={{
-              title: "Home",
+              title: "Fridge",
               tabBarIcon: ({ color }) => (
-                <FontAwesome name="home" size={28} color={color} />
+                <MaterialCommunityIcons name="fridge" size={28} color={color} />
               ),
             }}
           />
           <Tabs.Screen
-            name="about"
+            name="settings"
             options={{
-              title: "About",
+              title: "Settings",
               tabBarIcon: ({ color }) => (
-                <AntDesign name="infocirlceo" size={28} color={color} />
+                <Feather name="settings" size={28} color={color} />
               ),
             }}
           />

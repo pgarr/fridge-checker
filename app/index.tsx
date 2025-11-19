@@ -13,9 +13,8 @@ import {
   cancelNotification,
   scheduleNotification,
 } from "@/utils/notifications";
-import { getDaysForCritical, getHourForNotification } from "@/utils/config";
+import { useConfig } from "@/utils/config";
 import FloatingMenu from "@/components/floatingMenu";
-import { set } from "react-hook-form";
 
 const Index = () => {
   const db = useSQLiteContext();
@@ -24,6 +23,7 @@ const Index = () => {
   const [selectedItemIds, setSelectedItemIds] = useState<Set<number>>(
     new Set()
   );
+  const { daysForCritical, hourForNotification } = useConfig();
 
   useEffect(() => {
     loadItems();
@@ -39,8 +39,8 @@ const Index = () => {
     const title = `Item "${name}" is expiring tomorrow!`;
 
     const notificationDate = new Date(date);
-    notificationDate.setDate(notificationDate.getDate() - getDaysForCritical());
-    notificationDate.setHours(getHourForNotification(), 0, 0, 0);
+    notificationDate.setDate(notificationDate.getDate() - daysForCritical);
+    notificationDate.setHours(hourForNotification, 0, 0, 0);
 
     const notificationId = await scheduleNotification(notificationDate, title);
     await addItem(db, { name, date: date.toISOString(), notificationId });
